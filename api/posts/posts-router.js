@@ -9,6 +9,12 @@ router.get('/', (req, res) => {
         .then(posts => {
             res.status(200).json(posts)
         })
+        .catch(err => {
+            res.status(500).json({
+                message: 'The posts information could not be retrieved',
+                error: err.message
+            })
+        })
 })
 
 module.exports = router
