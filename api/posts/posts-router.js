@@ -35,7 +35,34 @@ router.get('/:id', (req, res) => {
                 error: err.message
             })
         })
+})
 
+router.post('/', (req, res) => {
+    if (!req.body.title || !req.body.contents) {
+        res.status(400).json({
+            message: 'message: "Please provide title and contents for the post'
+        })
+    } else {
+        Post.insert(req.body)
+            .then(post => {
+                Post.findById(post.id)
+                    .then(newPost => {
+                        res.status(201).json(newPost)
+                    })
+                    .catch(err => {
+                        res.status(500).json({
+                            message: 'Something went wrong when creating the post ID',
+                            error: err.message
+                        })
+                    })
+            })
+            .catch(err => {
+                res.status(500).json({
+                    message: 'There was an error while saving the post to the database',
+                    error: err.message
+                })
+            })
+    }
 })
 
 module.exports = router
